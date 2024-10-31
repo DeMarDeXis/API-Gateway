@@ -1,0 +1,15 @@
+version: '3.7'
+
+services:
+  redis:
+    image: redis:7
+    container_name: api_gateway_redis_1
+    privileged: true
+    ports:
+      - "6379:6379"
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    restart: always
+
+volumes:
+  redis_data:

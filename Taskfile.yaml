@@ -1,0 +1,38 @@
+version: "3"
+tasks:
+  main:
+    aliases:
+      - m
+      - main-cmd
+    desc: "main command"
+    cmd: go run ./cmd/main/main.go
+
+  docker-compose-build:
+    aliases:
+      - b
+      - build-cmd
+    desc: "Build the docker images and start(up) the containers"
+    cmd: docker-compose up --build
+
+  docker-compose-up:
+    aliases:
+      - dcu
+    desc: "Start and attach to containers for a service"
+    cmd: docker-compose up -d
+
+  docker-compose-down:
+    aliases:
+      - dcd
+    desc: "Stop and remove containers, networks, images, and volumes"
+    cmd: docker-compose down
+
+  docker-check:
+    aliases:
+      - dch
+    desc: "Check docker is running"
+    cmds:
+      - docker ps
+      - timeout /t 2 /nobreak
+      - docker ps -a
+      - timeout /t 2 /nobreak
+      - docker image ls
