@@ -22,9 +22,3 @@ func NewService(logg *slog.Logger, redis *redis.RedisClient) *Service {
 		redis: redis,
 	}
 }
-
-//func (s *AuthService) CreateToken(userId string) (string, error) {
-//	token := generateToken() // ваша логика генерации токена
-//	err := s.redis.SetToken(context.Background(), userId, token, 24*time.Hour)
-//	return token, err
-//}

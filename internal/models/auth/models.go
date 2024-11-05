@@ -1,4 +1,4 @@
-package models
+package auth
 
 type InputSignUp struct {
 	ID       int    `json:"-"`

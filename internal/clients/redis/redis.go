@@ -18,11 +18,11 @@ func NewRedisClient(addr string, log *slog.Logger) *RedisClient {
 		DB:   0, // 1 - 15
 
 		// Connection settings
-		//Username:     "",     // Username for ACL
-		//MaxRetries:   3,     // Maximum number of retries
-		//DialTimeout:  5 * time.Second,  // Timeout for establishing connections
-		//ReadTimeout:  3 * time.Second,  // Timeout for read operations
-		//WriteTimeout: 3 * time.Second,  // Timeout for write operations
+		//Username:     "",     //Username for ACL(Access Control List)
+		//MaxRetries:   3,     //Maximum number of retries
+		//DialTimeout:  5 * time.Second,  //Timeout for establishing connections
+		//ReadTimeout:  3 * time.Second,  //Timeout for read operations
+		//WriteTimeout: 3 * time.Second,  //Timeout for write operations
 
 		// Pool settings
 		//PoolSize:     10,    // Maximum number of socket connections

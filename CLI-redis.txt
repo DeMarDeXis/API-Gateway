@@ -1,0 +1,6 @@
+docker exec -it api_gateway_redis_1 redis-cli
+
+127.0.0.1:6379> KEYS *
+1) "\x06"
+127.0.0.1:6379> GET "\x06"
+<token>

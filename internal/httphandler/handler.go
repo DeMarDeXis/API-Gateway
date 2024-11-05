@@ -30,5 +30,15 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		auth.POST("/sign-in", h.signIn)
 	}
 
+	courses := router.Group("/courses")
+	{
+		courses.POST("/create", h.createCourse)
+		courses.GET("/", h.getAllCourses)
+		courses.GET("/:id", h.getCourseByID)
+		courses.PUT("/:id", h.updateCourse)
+		courses.DELETE("/:id", h.deleteCourse)
+		//Teacher
+	}
+
 	return router
 }

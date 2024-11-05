@@ -20,6 +20,7 @@ func NewAuthService(logg *slog.Logger, redis *redis.RedisClient) *AuthService {
 }
 
 func (s *AuthService) SetToken(ctx context.Context, userID string, token string) error {
+	s.logg.Debug("Service_userID: ", userID)
 	return s.redis.SetToken(context.Background(), userID, token, 24*time.Hour)
 }
 

@@ -1,7 +1,7 @@
 package httphandler
 
 import (
-	"ApiGateway/internal/models"
+	"ApiGateway/internal/models/auth"
 	"bytes"
 	"encoding/json"
 	"fmt"
@@ -11,7 +11,7 @@ import (
 )
 
 func (h *Handler) signUp(c *gin.Context) {
-	var input models.InputSignUp
+	var input auth.InputSignUp
 
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -59,7 +59,7 @@ func (h *Handler) signUp(c *gin.Context) {
 }
 
 func (h *Handler) signIn(c *gin.Context) {
-	var input models.InputSignIn
+	var input auth.InputSignIn
 
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -102,7 +102,7 @@ func (h *Handler) signIn(c *gin.Context) {
 		return
 	}
 
-	h.logg.Info("RESPONSE", slog.String("response", fmt.Sprintf("%+v", response.ID)))
+	h.logg.Debug("RESPONSE", slog.String("response", fmt.Sprintf("%+v", response.ID)))
 
 	token, err := h.grpcClient.GetToken(c.Request.Context(), int64(response.ID))
 	if err != nil {
@@ -111,7 +111,7 @@ func (h *Handler) signIn(c *gin.Context) {
 		return
 	}
 
-	redisID := string(rune(response.ID))
+	redisID := fmt.Sprintf("user_%d", response.ID)
 
 	err = h.services.SetToken(c.Request.Context(), redisID, token)
 	if err != nil {

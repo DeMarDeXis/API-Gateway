@@ -25,8 +25,6 @@ func main() {
 
 	logg.Info("starting api gateway", slog.String("env", cfg.Env))
 
-	//TODO:init services and redis
-	//TODO: get data from config
 	redisClient := redis.NewRedisClient(cfg.RedisConfig.Host+":"+strconv.Itoa(cfg.RedisConfig.Port), logg)
 	services := service.NewService(logg, redisClient)
 	ssoClient, err := grpc.New(
@@ -42,13 +40,10 @@ func main() {
 		return
 	}
 
-	//TODO: init handlers
 	handlers := httphandler.NewHandler(services, logg, ssoClient)
 
-	//TODO: init router
 	router := handlers.InitRoutes()
 
-	//TODO: init srv
 	srv := http.Server{
 		Addr:         cfg.Address + ":" + strconv.Itoa(cfg.HTTPServer.Port),
 		Handler:      router,
@@ -64,7 +59,6 @@ func main() {
 	}()
 	logg.Info("server started", slog.String("address", cfg.Address+":"+strconv.Itoa(cfg.HTTPServer.Port)))
 
-	//TODO: graceful shutdown
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	<-quit
@@ -91,7 +85,4 @@ func setupPrettySlogLocal() *slog.Logger {
 	return slog.New(handler)
 }
 
-//TODO: add redis client
-
-//services := service.NewService(repos, redisClient)
-//handler := httphandler.NewHandler(services)
+//TODO: add method by teacher's id

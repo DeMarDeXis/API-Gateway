@@ -1,5 +1,5 @@
-cd c:\users\user\documents\github\тзdenick\apigateway
-
 cd c:\users\user\documents\github\тзdenick\userscontrol
 
 cd c:\users\user\documents\github\тзdenick\grpc\grpc_golang\sso
+
+cd c:\users\user\documents\github\тзdenick\lessons
