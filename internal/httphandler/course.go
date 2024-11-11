@@ -8,6 +8,11 @@ import (
 	"net/http"
 )
 
+const (
+	// TODO: fix user id
+	testUserID = "user_9"
+)
+
 func (h *Handler) createCourse(c *gin.Context) {
 	var input courses.InputCourse
 
@@ -17,8 +22,7 @@ func (h *Handler) createCourse(c *gin.Context) {
 		return
 	}
 
-	// TODO: fix user id
-	token, err := h.services.GetToken(c.Request.Context(), "user_7")
+	token, err := h.services.GetToken(c.Request.Context(), testUserID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get token"})
 		h.logg.Error(err.Error())
@@ -70,8 +74,7 @@ func (h *Handler) createCourse(c *gin.Context) {
 }
 
 func (h *Handler) getAllCourses(c *gin.Context) {
-	// TODO: fix user id
-	token, err := h.services.GetToken(c.Request.Context(), "user_7")
+	token, err := h.services.GetToken(c.Request.Context(), testUserID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get token"})
 		h.logg.Error(err.Error())
@@ -112,8 +115,7 @@ func (h *Handler) getAllCourses(c *gin.Context) {
 }
 
 func (h *Handler) getCourseByID(c *gin.Context) {
-	// TODO: fix user id
-	token, err := h.services.GetToken(c.Request.Context(), "user_7")
+	token, err := h.services.GetToken(c.Request.Context(), testUserID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get token"})
 		h.logg.Error(err.Error())
@@ -154,8 +156,7 @@ func (h *Handler) getCourseByID(c *gin.Context) {
 }
 
 func (h *Handler) updateCourse(c *gin.Context) {
-	// TODO: fix user id
-	token, err := h.services.GetToken(c.Request.Context(), "user_7")
+	token, err := h.services.GetToken(c.Request.Context(), testUserID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get token"})
 		h.logg.Error(err.Error())
@@ -208,8 +209,7 @@ func (h *Handler) updateCourse(c *gin.Context) {
 }
 
 func (h *Handler) deleteCourse(c *gin.Context) {
-	// TODO: fix user id
-	token, err := h.services.GetToken(c.Request.Context(), "user_7")
+	token, err := h.services.GetToken(c.Request.Context(), testUserID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get token"})
 		h.logg.Error(err.Error())

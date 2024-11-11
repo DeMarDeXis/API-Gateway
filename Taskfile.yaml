@@ -36,3 +36,90 @@ tasks:
       - docker ps -a
       - timeout /t 2 /nobreak
       - docker image ls
+
+  users-up:
+    aliases:
+      - uu
+    desc: "Launch user srv"
+    cmds:
+      - cmd: |
+          cd c:\\users\\user\\documents\\github\\тзdenick\\userscontrol
+          docker-compose up -d
+
+  users-down:
+    aliases:
+      - ud
+    desc: "DOWN user srv"
+    cmds:
+      - cmd: |
+          cd c:\\users\\user\\documents\\github\\тзdenick\\userscontrol
+          docker-compose down
+
+  users-run:
+    aliases:
+      - ur
+    desc: "Run user srv"
+    cmds:
+      - cmd: |
+          cd c:\\users\\user\\documents\\github\\тзdenick\\userscontrol
+          go run ./cmd/usercontrol/main.go
+
+  grpc-up:
+    aliases:
+      - gu
+    desc: "GRPC launcher"
+    cmds:
+      - cmd: |
+          cd "c:\\users\\user\\documents\\github\\тзdenick\\grpc\\grpc_golang\\sso"
+          docker-compose up -d
+        ignore_error: true
+
+  grpc-down:
+    aliases:
+      - gd
+    desc: "GRPC down"
+    cmds:
+      - cmd: |
+          cd "c:\\users\\user\\documents\\github\\тзdenick\\grpc\\grpc_golang\\sso"
+          docker-compose down
+        ignore_error: true
+
+  grpc-run:
+    aliases:
+      - gr
+    desc: "GRPC runner"
+    cmds:
+      - cmd: |
+          cd "c:\\users\\user\\documents\\github\\тзdenick\\grpc\\grpc_golang\\sso"
+          go run ./cmd/sso/main.go --config=./config/local.yaml
+        ignore_error: true
+
+  lessons-up:
+    aliases:
+      - lu
+    desc: "Lessons launcher"
+    cmds:
+      - cmd: |
+          cd c:\\users\\user\\documents\\github\\тзdenick\\lessons
+          task launcher
+
+  lessons-down:
+    aliases:
+      - ld
+    desc: "Lessons destroyer"
+    cmds:
+      - echo "Be careful! This command will stop and remove all containers, networks, images, and volumes"
+      - timeout /t 5 /nobreak
+      - cmd: |
+          cd c:\\users\\user\\documents\\github\\тзdenick\\lessons
+          task exit
+
+  lessons-run:
+    aliases:
+      - lr
+    desc: "Lessons runner"
+    cmds:
+      - cmd: |
+          cd c:\\users\\user\\documents\\github\\тзdenick\\lessons
+          go run ./cmd/lessons/main.go
+      

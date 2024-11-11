@@ -2,8 +2,6 @@ package httphandler
 
 import (
 	"ApiGateway/internal/models/auth"
-	"bytes"
-	"encoding/json"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"log/slog"
@@ -19,42 +17,15 @@ func (h *Handler) signUp(c *gin.Context) {
 		return
 	}
 
-	body, err := json.Marshal(input)
+	id, err := h.userClient.SignUp(input)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		h.logg.Error(err.Error())
 		return
 	}
 
-	client := &http.Client{}
-
-	req, err := http.NewRequest("POST", "http://localhost:8081/users/sign-up", bytes.NewReader(body))
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		h.logg.Error(err.Error())
-		return
-	}
-	req.Header.Set("Content-Type", "application/json")
-
-	resp, err := client.Do(req)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		h.logg.Error(err.Error())
-		return
-	}
-	defer resp.Body.Close()
-
-	var response struct {
-		ID int `json:"id"`
-	}
-	if err := json.NewDecoder(resp.Body).Decode(&response); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		h.logg.Error(err.Error())
-		return
-	}
-
-	c.JSON(resp.StatusCode, gin.H{
-		"id": response.ID,
+	c.JSON(http.StatusOK, gin.H{
+		"id": id,
 	})
 }
 
@@ -67,51 +38,23 @@ func (h *Handler) signIn(c *gin.Context) {
 		return
 	}
 
-	body, err := json.Marshal(input)
+	id, err := h.userClient.SignIn(input)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		h.logg.Error(err.Error())
 		return
 	}
 
-	client := &http.Client{}
+	h.logg.Debug("RESPONSE", slog.String("response", fmt.Sprintf("%+v", id)))
 
-	req, err := http.NewRequest("GET", "http://localhost:8081/users/sign-in", bytes.NewReader(body))
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		h.logg.Error(err.Error())
-		return
-	}
-	req.Header.Set("Content-Type", "application/json")
-
-	resp, err := client.Do(req)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		h.logg.Error(err.Error())
-		return
-	}
-	defer resp.Body.Close()
-
-	var response struct {
-		ID int `json:"id"`
-	}
-
-	if err := json.NewDecoder(resp.Body).Decode(&response); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		h.logg.Error(err.Error())
-		return
-	}
-
-	h.logg.Debug("RESPONSE", slog.String("response", fmt.Sprintf("%+v", response.ID)))
-
-	token, err := h.grpcClient.GetToken(c.Request.Context(), int64(response.ID))
+	token, err := h.grpcClient.GetToken(c.Request.Context(), int64(id))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get token"})
 		h.logg.Error(err.Error())
 		return
 	}
 
-	redisID := fmt.Sprintf("user_%d", response.ID)
+	redisID := fmt.Sprintf("user_%d", id)
 
 	err = h.services.SetToken(c.Request.Context(), redisID, token)
 	if err != nil {

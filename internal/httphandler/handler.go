@@ -2,6 +2,7 @@ package httphandler
 
 import (
 	"ApiGateway/internal/clients/grpc"
+	"ApiGateway/internal/clients/users"
 	"ApiGateway/internal/service"
 	"github.com/gin-gonic/gin"
 	"log/slog"
@@ -11,13 +12,15 @@ type Handler struct {
 	logg       *slog.Logger
 	services   *service.Service
 	grpcClient *grpc.Client
+	userClient *users.Client
 }
 
-func NewHandler(services *service.Service, logg *slog.Logger, grpc *grpc.Client) *Handler {
+func NewHandler(services *service.Service, logg *slog.Logger, grpc *grpc.Client, users *users.Client) *Handler {
 	return &Handler{
 		logg:       logg,
 		services:   services,
 		grpcClient: grpc,
+		userClient: users,
 	}
 }
 

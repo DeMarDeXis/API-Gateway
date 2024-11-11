@@ -32,15 +32,21 @@ type RedisConfig struct {
 	DB       int    `yaml:"db"`
 }
 
-type Client struct {
+type AuthClient struct {
 	Addr         string        `yaml:"addr"`
 	Timeout      time.Duration `yaml:"timeout"`
 	RetriesCount int           `yaml:"retries_count"`
 	//Insecure     bool          `yaml:"insecure"`
 }
 
+type UsersClient struct {
+	Address string `yaml:"address"`
+	Port    int    `yaml:"port"`
+}
+
 type ClientsConfig struct {
-	SSO Client `yaml:"sso"`
+	SSO   AuthClient  `yaml:"sso"`
+	Users UsersClient `yaml:"users"`
 }
 
 func InitConfig() *Config {

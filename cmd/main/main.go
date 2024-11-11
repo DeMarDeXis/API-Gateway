@@ -3,6 +3,7 @@ package main
 import (
 	"ApiGateway/internal/clients/grpc"
 	"ApiGateway/internal/clients/redis"
+	"ApiGateway/internal/clients/users"
 	"ApiGateway/internal/httphandler"
 	"ApiGateway/internal/service"
 	"ApiGateway/pkg/config"
@@ -34,13 +35,21 @@ func main() {
 		cfg.Clients.SSO.Timeout,
 		cfg.Clients.SSO.RetriesCount,
 	)
-	logg.Info("sso client initialized", slog.String("addr", cfg.Clients.SSO.Addr), slog.String("timeout", cfg.Clients.SSO.Timeout.String()), slog.String("retriesCount", strconv.Itoa(cfg.Clients.SSO.RetriesCount)))
+	logg.Info("sso client initialized",
+		slog.String("addr", cfg.Clients.SSO.Addr),
+		slog.String("timeout", cfg.Clients.SSO.Timeout.String()),
+		slog.String("retriesCount",
+			strconv.Itoa(cfg.Clients.SSO.RetriesCount)),
+	)
 	if err != nil {
 		logg.Error("failed to init sso client", err)
 		return
 	}
 
-	handlers := httphandler.NewHandler(services, logg, ssoClient)
+	userSRV := users.New(cfg.Clients.Users.Address+":"+strconv.Itoa(cfg.Clients.Users.Port), logg)
+	logg.Info("user client initialized", slog.String("addr", cfg.Clients.Users.Address+strconv.Itoa(cfg.Clients.Users.Port)))
+
+	handlers := httphandler.NewHandler(services, logg, ssoClient, userSRV)
 
 	router := handlers.InitRoutes()
 

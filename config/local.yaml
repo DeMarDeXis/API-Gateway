@@ -20,3 +20,7 @@ clients:
     addr: "localhost:44044"
     timeout: 10s
     retries_count: 3
+
+  users:
+    address: "http://localhost"
+    port: 8081
