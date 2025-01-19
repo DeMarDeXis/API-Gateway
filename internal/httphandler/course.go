@@ -10,7 +10,8 @@ import (
 
 const (
 	// TODO: fix user id
-	testUserID = "user_9"
+	testUserID   = "user_2"
+	testCourseID = "1"
 )
 
 func (h *Handler) createCourse(c *gin.Context) {
@@ -245,4 +246,40 @@ func (h *Handler) deleteCourse(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete course"})
 	}
 	h.logg.Debug("Course deleted successfully")
+}
+
+func (h *Handler) joinCourse(c *gin.Context) {
+	token, err := h.services.GetToken(c.Request.Context(), testUserID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get token"})
+		h.logg.Error(err.Error())
+		return
+	}
+
+	client := &http.Client{}
+
+	req, err := http.NewRequest("POST", "http://localhost:8080/courses/join/"+testCourseID, nil)
+	if err != nil {
+		c.JSON(http.StatusBadGateway, gin.H{"error": err.Error()})
+		h.logg.Error(err.Error())
+		return
+	}
+
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Add("Authorization", "Bearer "+token)
+
+	resp, err := client.Do(req)
+	if err != nil {
+		c.JSON(http.StatusBadGateway, gin.H{"error": err.Error()})
+		h.logg.Error(err.Error())
+		return
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode == http.StatusOK {
+		c.JSON(http.StatusOK, gin.H{"message": "Join successfully"})
+	} else {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to join course"})
+	}
+	h.logg.Debug("Join course successfully")
 }

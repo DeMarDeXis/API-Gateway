@@ -9,7 +9,7 @@ http_server:
   write_timeout: 10s
 
 redis:
-  host: "192.168.99.100"
+  host: "192.168.99.101"
   port: 6379
   password: ""
   db: 0

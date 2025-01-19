@@ -94,4 +94,9 @@ func setupPrettySlogLocal() *slog.Logger {
 	return slog.New(handler)
 }
 
+//TODO: fix user_id
 //TODO: add method by teacher's id
+//TODO: fix kafka in lessons
+//TODO: add consumer in Notification service
+//TODO: add otros methods in courses service
+//TODO: refactor redis for another bussiness logic
